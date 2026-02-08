@@ -43,9 +43,9 @@ const registerSchema: Schema<RegisterSchema> = Joi.object({
   birthday: Joi.date().required(),
   courseType: Joi.string().required(),
   courseCategory: Joi.string().required(),
-  courseStart: Joi.date().allow(null),
-  preferedTime: Joi.string().allow(null),
-  remarks: Joi.string().allow(null),
+  courseStart: Joi.date().empty().allow(null),
+  preferedTime: Joi.string().empty().allow(null),
+  remarks: Joi.string().empty().allow(null),
   agreement: Joi.boolean().required(),
   tos: Joi.boolean().required(),
 });
