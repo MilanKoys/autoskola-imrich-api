@@ -49,7 +49,8 @@ router.post("/", async (request: Request, response: Response) => {
     registerSchema.validate(body);
 
   if (schemaResult.error) {
-    response.sendStatus(403);
+    response.statusCode = 403;
+    response.json(schemaResult.error);
     return;
   }
 
