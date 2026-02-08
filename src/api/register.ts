@@ -8,6 +8,32 @@ import { Collections } from "../contracts/collections.js";
 import { nanoid } from "nanoid";
 import nodemailer, { Transporter } from "nodemailer";
 
+const courseTypes: { label: string; value: string }[] = [
+  {
+    label: "Štvornesačné kurzy - Basic",
+    value: "4",
+  },
+  {
+    label: "Dvojmesačné kurzy - Deluxe",
+    value: "2",
+  },
+  {
+    label: "Mesačné kurzy - Deluxe",
+    value: "1",
+  },
+];
+
+const courseCategory: { label: string; value: string }[] = [
+  {
+    label: "B, B1, AM",
+    value: "B",
+  },
+  {
+    label: "A, A2, A1, AM",
+    value: "A",
+  },
+];
+
 const registerSchema: Schema<RegisterSchema> = Joi.object({
   firstName: Joi.string().required(),
   lastName: Joi.string().required(),
@@ -17,11 +43,11 @@ const registerSchema: Schema<RegisterSchema> = Joi.object({
   birthday: Joi.date().required(),
   courseType: Joi.string().required(),
   courseCategory: Joi.string().required(),
-  courseStart: Joi.date(),
-  preferedTime: Joi.string(),
-  remarks: Joi.string(),
-  agreement: Joi.boolean(),
-  tos: Joi.boolean(),
+  courseStart: Joi.date().allow(null),
+  preferedTime: Joi.string().allow(null),
+  remarks: Joi.string().allow(null),
+  agreement: Joi.boolean().required(),
+  tos: Joi.boolean().required(),
 });
 
 const transporter: Transporter = nodemailer.createTransport({
@@ -62,9 +88,9 @@ router.post("/", async (request: Request, response: Response) => {
   await transporter.sendMail({
     from: '"Autoškola Imrich" <info@autoskolaimrich.sk>',
     to: "info@autoskolaimrich.sk",
-    subject: "Hello from Express",
-    text: "This email was sent via Mailcow",
-    html: "<b>This email was sent via Mailcow</b>",
+    subject: `Nová registrácia pre ${schemaResult.value.firstName} ${schemaResult.value.lastName}`,
+    text: `Meno: ${schemaResult.value.firstName}, Priezvisko: ${schemaResult.value.lastName}, Email: ${schemaResult.value.email}, Telefón: ${schemaResult.value.phone}, Adresa: ${schemaResult.value.address}, Rok narodenia: ${schemaResult.value.birthday}, Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}, Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
+    html: `Meno: ${schemaResult.value.firstName}<br />Priezvisko: ${schemaResult.value.lastName}, Email: ${schemaResult.value.email}<br />Telefón: ${schemaResult.value.phone}<br />Adresa: ${schemaResult.value.address}<br />Rok narodenia: ${schemaResult.value.birthday}<br />Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}<br />Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
   });
 
   await registerCollection.insertOne(registration);
