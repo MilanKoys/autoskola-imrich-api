@@ -1,6 +1,7 @@
 import { getDatabase } from "./database.js";
 import api from "./api.js";
 import dotenv from "dotenv";
+import registerRouter from "./api/register.js";
 
 const databaseUri: string = "mongodb://127.0.0.1:27017/?directConnection=true";
 const databaseName: string = "repa";
@@ -12,6 +13,8 @@ await getDatabase({
   uri: databaseUri,
   databaseName: databaseName,
 });
+
+api.use("/register", registerRouter);
 
 api.listen(apiPort, () =>
   console.log(`Back-end running on http://localhost:${apiPort}`),
