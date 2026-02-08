@@ -90,7 +90,7 @@ router.post("/", async (request: Request, response: Response) => {
     to: "info@autoskolaimrich.sk",
     subject: `Nová registrácia pre ${schemaResult.value.firstName} ${schemaResult.value.lastName}`,
     text: `Meno: ${schemaResult.value.firstName}, Priezvisko: ${schemaResult.value.lastName}, Email: ${schemaResult.value.email}, Telefón: ${schemaResult.value.phone}, Adresa: ${schemaResult.value.address}, Rok narodenia: ${schemaResult.value.birthday}, Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}, Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
-    html: `Meno: ${schemaResult.value.firstName}<br />Priezvisko: ${schemaResult.value.lastName}, Email: ${schemaResult.value.email}<br />Telefón: ${schemaResult.value.phone}<br />Adresa: ${schemaResult.value.address}<br />Rok narodenia: ${schemaResult.value.birthday}<br />Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}<br />Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
+    html: `Meno: ${schemaResult.value.firstName}<br />Priezvisko: ${schemaResult.value.lastName}<br />Email: ${schemaResult.value.email}<br />Telefón: ${schemaResult.value.phone}<br />Adresa: ${schemaResult.value.address}<br />Rok narodenia: ${schemaResult.value.birthday}<br />Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}<br />Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
   });
 
   await registerCollection.insertOne(registration);
