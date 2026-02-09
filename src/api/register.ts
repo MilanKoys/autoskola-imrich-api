@@ -43,9 +43,9 @@ const registerSchema: Schema<RegisterSchema> = Joi.object({
   birthday: Joi.date().required(),
   courseType: Joi.string().required(),
   courseCategory: Joi.string().required(),
-  courseStart: Joi.date().empty().allow(null),
-  preferedTime: Joi.string().empty().allow(null),
-  remarks: Joi.string().empty().allow(null),
+  courseStart: Joi.date().allow(null),
+  preferedTime: Joi.string().allow(null),
+  remarks: Joi.string().allow(null),
   agreement: Joi.boolean().required(),
   tos: Joi.boolean().required(),
 });
@@ -88,6 +88,14 @@ router.post("/", async (request: Request, response: Response) => {
   await transporter.sendMail({
     from: '"Autoškola Imrich" <info@autoskolaimrich.sk>',
     to: "info@autoskolaimrich.sk",
+    subject: `Nová registrácia pre ${schemaResult.value.firstName} ${schemaResult.value.lastName}`,
+    text: `Meno: ${schemaResult.value.firstName}, Priezvisko: ${schemaResult.value.lastName}, Email: ${schemaResult.value.email}, Telefón: ${schemaResult.value.phone}, Adresa: ${schemaResult.value.address}, Rok narodenia: ${schemaResult.value.birthday}, Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}, Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
+    html: `Meno: ${schemaResult.value.firstName}<br />Priezvisko: ${schemaResult.value.lastName}<br />Email: ${schemaResult.value.email}<br />Telefón: ${schemaResult.value.phone}<br />Adresa: ${schemaResult.value.address}<br />Rok narodenia: ${schemaResult.value.birthday}<br />Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}<br />Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
+  });
+
+  await transporter.sendMail({
+    from: '"Autoškola Imrich" <info@autoskolaimrich.sk>',
+    to: "radourbancik@autoskolaimrich.sk",
     subject: `Nová registrácia pre ${schemaResult.value.firstName} ${schemaResult.value.lastName}`,
     text: `Meno: ${schemaResult.value.firstName}, Priezvisko: ${schemaResult.value.lastName}, Email: ${schemaResult.value.email}, Telefón: ${schemaResult.value.phone}, Adresa: ${schemaResult.value.address}, Rok narodenia: ${schemaResult.value.birthday}, Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}, Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
     html: `Meno: ${schemaResult.value.firstName}<br />Priezvisko: ${schemaResult.value.lastName}<br />Email: ${schemaResult.value.email}<br />Telefón: ${schemaResult.value.phone}<br />Adresa: ${schemaResult.value.address}<br />Rok narodenia: ${schemaResult.value.birthday}<br />Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}<br />Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
