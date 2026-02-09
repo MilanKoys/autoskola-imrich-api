@@ -50,22 +50,22 @@ const registerSchema: Schema<RegisterSchema> = Joi.object({
   tos: Joi.boolean().required(),
 });
 
-const transporter: Transporter = nodemailer.createTransport({
-  host: "127.0.0.1",
-  port: 587,
-  secure: false,
-  auth: {
-    user: "info@autoskolaimrich.sk",
-    pass: process.env.MAIL_PASSWORD,
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
-
 const router: Router = express.Router();
 
 router.post("/", async (request: Request, response: Response) => {
+  const transporter: Transporter = nodemailer.createTransport({
+    host: "127.0.0.1",
+    port: 587,
+    secure: false,
+    auth: {
+      user: "info@autoskolaimrich.sk",
+      pass: process.env.MAIL_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+
   const database: Db = await getDatabase();
   const registerCollection: Collection<Register> = database.collection(
     Collections.Registers,
