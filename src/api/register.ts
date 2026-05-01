@@ -101,9 +101,18 @@ router.post("/", async (request: Request, response: Response) => {
     html: `Meno: ${schemaResult.value.firstName}<br />Priezvisko: ${schemaResult.value.lastName}<br />Email: ${schemaResult.value.email}<br />Telefón: ${schemaResult.value.phone}<br />Adresa: ${schemaResult.value.address}<br />Rok narodenia: ${schemaResult.value.birthday}<br />Typ kurzu: ${courseTypes.find((c) => c.value === schemaResult.value.courseType)?.label}<br />Kategória kurzu: ${courseCategory.find((c) => c.value === schemaResult.value.courseCategory)?.label}`,
   });
 
+  const foundRegistration = await registerCollection.findOne({
+    email: registration.email,
+  });
+
+  if (foundRegistration) {
+    response.statusCode = 403;
+    return response.json({ message: "Email už je zaregistrovaný." });
+  }
+
   await registerCollection.insertOne(registration);
 
-  response.sendStatus(200);
+  response.json({ message: "ok" });
 });
 
 export default router;
